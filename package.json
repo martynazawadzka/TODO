@@ -1,0 +1,22 @@
+{
+  "name": "todo",
+  "version": "1.0.0",
+  "description": "Your todo list",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/martynazawadzka/TODO.git"
+  },
+  "author": "Martyna Zawadzka",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/martynazawadzka/TODO/issues"
+  },
+  "homepage": "https://github.com/martynazawadzka/TODO#readme",
+  "dependencies": {
+    "yargs": "^12.0.5"
+  }
+}
