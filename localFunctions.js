@@ -77,7 +77,7 @@ const deleteTask = (id, initialData) => {
     initialData.tasks.splice(taskToDeleteIndex, 1);
     updateLocalData(initialData);
 
-    console.log(`You have succesfully removed task with id ${id}`);
+    console.log(`You have successfully removed task with id ${id}`);
   } else {
     console.error(`There is no task with id ${id}`);
   }

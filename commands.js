@@ -70,7 +70,7 @@ const deleteCommand = {
 };
 
 const changeStatusCommand = {
-  command: 'change status [id]',
+  command: 'change [id]',
   describe: 'Change status for task with given id',
   handler: args => {
     try {
