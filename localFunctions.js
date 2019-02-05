@@ -1,6 +1,14 @@
 const fs = require('fs');
 const Task = require('./newTask');
 
+const listTitle = title => {
+  console.log('===============');
+  console.log('');
+  console.log(title);
+  console.log('');
+  console.log('===============');
+};
+
 const findTaskIndexById = (id, initialData) => {
   let taskIndex;
   initialData.tasks.forEach((task, index) => {
@@ -12,7 +20,13 @@ const findTaskIndexById = (id, initialData) => {
 };
 
 const getInitialData = () => {
-  return JSON.parse(fs.readFileSync('./todo.json', 'utf8'));
+  try {
+    return JSON.parse(fs.readFileSync('./todo.json', 'utf8'));
+  } catch (err) {
+    console.log("There is no file todo.json, I'm creating it for you");
+    fs.writeFileSync('todo.json', '{ "lastId": 0, "tasks": [] }');
+    return JSON.parse(fs.readFileSync('./todo.json', 'utf8'));
+  }
 };
 
 const updateLocalData = data => {
@@ -21,11 +35,17 @@ const updateLocalData = data => {
 };
 
 const showTasks = (tasks, infoText) => {
-  console.log('===============');
-  console.log('');
-  console.log(infoText);
-  console.log('');
-  console.log('===============');
+  if (!tasks) {
+    console.log('Your data are not valid');
+    return;
+  }
+
+  if (!tasks.length) {
+    infoText = 'Your list is empty';
+  }
+
+  listTitle(infoText);
+
   tasks.forEach((task, index) => {
     console.log(
       `${index + 1}. ${task.task} (category: ${task.category}, id: ${
@@ -116,5 +136,6 @@ module.exports = {
   deleteTask,
   changeStatus,
   filterTasksByStatus,
-  filterTasksByCategory
+  filterTasksByCategory,
+  updateLocalData
 };

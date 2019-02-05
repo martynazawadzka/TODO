@@ -5,15 +5,16 @@ const {
   deleteTask,
   changeStatus,
   filterTasksByStatus,
-  filterTasksByCategory
+  filterTasksByCategory,
+  updateLocalData
 } = require('./localFunctions');
 
-const args = require('yargs').argv;
+const { upload, download } = require('./serverFunctions');
 
 const showCommand = {
-  command: ['show [status]', '$0'],
-  describe: 'Show ToDo list',
-  handler: () => {
+  command: ['show [status] [category]', '$0'],
+  describe: 'Show TTODO list [with filering by status, category or both]',
+  handler: args => {
     try {
       const initialData = getInitialData();
       let filteredTasks = initialData.tasks;
@@ -45,7 +46,7 @@ const showCommand = {
 const addCommand = {
   command: 'add [name] [category]',
   describe: 'Add new task to local data',
-  handler: () => {
+  handler: args => {
     try {
       const initialData = getInitialData();
       createTask(args.name, args.category, initialData);
@@ -58,7 +59,7 @@ const addCommand = {
 const deleteCommand = {
   command: 'delete [id]',
   describe: 'Delete task with given id from local data',
-  handler: () => {
+  handler: args => {
     try {
       const initialData = getInitialData();
       deleteTask(args.id, initialData);
@@ -71,7 +72,7 @@ const deleteCommand = {
 const changeStatusCommand = {
   command: 'change status [id]',
   describe: 'Change status for task with given id',
-  handler: () => {
+  handler: args => {
     try {
       const initialData = getInitialData();
       changeStatus(args.id, initialData, args.status);
@@ -81,4 +82,41 @@ const changeStatusCommand = {
   }
 };
 
-module.exports = [showCommand, addCommand, deleteCommand, changeStatusCommand];
+const uploadCommand = {
+  command: 'upload',
+  describe: 'Upload local data to server',
+  handler: () => {
+    try {
+      upload();
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+};
+
+const downloadCommand = {
+  command: 'download',
+  describe: 'Download remote data and overwrite local',
+  handler: async () => {
+    try {
+      const serverData = await download();
+
+      if (serverData) {
+        showTasks(serverData.tasks, 'Your tasks on server');
+        updateLocalData(serverData);
+        console.log('Your local tasks are now the same as on server');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+};
+
+module.exports = [
+  showCommand,
+  addCommand,
+  deleteCommand,
+  changeStatusCommand,
+  uploadCommand,
+  downloadCommand
+];
