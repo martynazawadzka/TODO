@@ -13,7 +13,18 @@ const { upload, download } = require('./serverFunctions');
 
 const showCommand = {
   command: ['show [status] [category]', '$0'],
-  describe: 'Show TTODO list [with filering by status, category or both]',
+  describe: 'Show TODO list [with filering by status, category or both]',
+  builder: yargs => {
+    yargs
+      .positional('status', {
+        describe: 'Task new status',
+        type: 'string'
+      })
+      .positional('category', {
+        describe: 'Task category',
+        type: 'string'
+      });
+  },
   handler: args => {
     try {
       const initialData = getInitialData();
@@ -44,8 +55,19 @@ const showCommand = {
 };
 
 const addCommand = {
-  command: 'add [name] [category]',
+  command: 'add <name> [category]',
   describe: 'Add new task to local data',
+  builder: yargs => {
+    yargs
+      .positional('name', {
+        describe: 'Task name',
+        type: 'string'
+      })
+      .positional('category', {
+        describe: 'Task category',
+        type: 'string'
+      });
+  },
   handler: args => {
     try {
       const initialData = getInitialData();
@@ -57,8 +79,14 @@ const addCommand = {
 };
 
 const deleteCommand = {
-  command: 'delete [id]',
+  command: 'delete <id>',
   describe: 'Delete task with given id from local data',
+  builder: yargs => {
+    yargs.positional('id', {
+      describe: 'Task id',
+      type: 'number'
+    });
+  },
   handler: args => {
     try {
       const initialData = getInitialData();
@@ -70,8 +98,19 @@ const deleteCommand = {
 };
 
 const changeStatusCommand = {
-  command: 'change [id]',
+  command: 'change <id> [status]',
   describe: 'Change status for task with given id',
+  builder: yargs => {
+    yargs
+      .positional('id', {
+        describe: 'Task id',
+        type: 'number'
+      })
+      .positional('status', {
+        describe: 'Task new status [active/inactive]',
+        type: 'string'
+      });
+  },
   handler: args => {
     try {
       const initialData = getInitialData();
